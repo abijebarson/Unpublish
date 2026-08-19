@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Unpublish</RootNamespace>
+    <AssemblyName>Unpublish</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jellyfin.Model" Version="10.11.*" />
+    <PackageReference Include="Jellyfin.Controller" Version="10.11.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Web\**" />
+    <EmbeddedResource Include="Web\**" />
+  </ItemGroup>
+
+</Project>

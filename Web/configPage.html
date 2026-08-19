@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <div id="UnpublishConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-select,emby-checkbox">
+        <style>
+            #UnpublishConfigPage .ec-container {
+                max-width: 950px;
+                margin: 0 auto;
+                padding: 1.5rem 1rem;
+                color: #e0e0e0;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+
+            #UnpublishConfigPage .ec-header {
+                margin-bottom: 2rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding-bottom: 1rem;
+            }
+
+            #UnpublishConfigPage .ec-header h1 {
+                font-size: 1.8rem;
+                font-weight: 600;
+                margin: 0 0 0.4rem 0;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            #UnpublishConfigPage .ec-badge-pro {
+                font-size: 0.75rem;
+                background: linear-gradient(135deg, #00a4dc, #0076a8);
+                color: #fff;
+                padding: 2px 8px;
+                border-radius: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-weight: bold;
+            }
+
+            #UnpublishConfigPage .ec-subtitle {
+                margin: 0;
+                color: #9e9e9e;
+                font-size: 0.95rem;
+            }
+
+            #UnpublishConfigPage .ec-card {
+                background: rgba(32, 32, 36, 0.85);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 10px;
+                padding: 1.5rem;
+                margin-bottom: 1.75rem;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            #UnpublishConfigPage .ec-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            #EpisodeControlConfigPage .ec-card-title {
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin: 0;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            #EpisodeControlConfigPage .ec-card-title svg {
+                color: #00a4dc;
+            }
+
+            /* Protection Mode Selector */
+            #EpisodeControlConfigPage .ec-mode-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 14px;
+                margin-top: 0.75rem;
+            }
+
+            #EpisodeControlConfigPage .ec-mode-option {
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                background: rgba(20, 20, 24, 0.7);
+                border-radius: 8px;
+                padding: 14px 16px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                position: relative;
+            }
+
+            #EpisodeControlConfigPage .ec-mode-option:hover {
+                border-color: rgba(0, 164, 220, 0.4);
+                background: rgba(0, 164, 220, 0.05);
+            }
+
+            #EpisodeControlConfigPage .ec-mode-option.active {
+                border-color: #00a4dc;
+                background: rgba(0, 164, 220, 0.12);
+                box-shadow: 0 0 15px rgba(0, 164, 220, 0.2);
+            }
+
+            #EpisodeControlConfigPage .ec-mode-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            #EpisodeControlConfigPage .ec-mode-radio {
+                appearance: none;
+                -webkit-appearance: none;
+                width: 18px;
+                height: 18px;
+                border: 2px solid rgba(255, 255, 255, 0.4);
+                border-radius: 50%;
+                margin: 0;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                transition: all 0.2s ease;
+            }
+
+            #EpisodeControlConfigPage .ec-mode-option.active .ec-mode-radio {
+                border-color: #00a4dc;
+            }
+
+            #EpisodeControlConfigPage .ec-mode-option.active .ec-mode-radio::after {
+                content: "";
+                width: 8px;
+                height: 8px;
+                background: #00a4dc;
+                border-radius: 50%;
+            }
+
+            #EpisodeControlConfigPage .ec-mode-title {
+                font-weight: 600;
+                font-size: 1rem;
+                color: #fff;
+            }
+
+            #EpisodeControlConfigPage .ec-mode-desc {
+                font-size: 0.83rem;
+                color: #a0a0a8;
+                line-height: 1.35;
+                margin-left: 28px;
+            }
+
+            #EpisodeControlConfigPage .ec-stats-badge {
+                font-size: 0.8rem;
+                padding: 3px 10px;
+                background: rgba(0, 164, 220, 0.2);
+                color: #29b6f6;
+                border: 1px solid rgba(41, 182, 246, 0.3);
+                border-radius: 14px;
+                font-weight: 500;
+            }
+
+            #EpisodeControlConfigPage .ec-toolbar {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 1rem;
+            }
+
+            #EpisodeControlConfigPage .ec-search-box {
+                flex: 1;
+                min-width: 200px;
+                position: relative;
+            }
+
+            #EpisodeControlConfigPage .ec-search-input {
+                width: 100%;
+                box-sizing: border-box;
+                background: rgba(0, 0, 0, 0.35);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                color: #fff;
+                padding: 8px 12px 8px 34px;
+                border-radius: 6px;
+                font-size: 0.9rem;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+
+            #EpisodeControlConfigPage .ec-search-input:focus {
+                border-color: #00a4dc;
+                background: rgba(0, 0, 0, 0.5);
+            }
+
+            #EpisodeControlConfigPage .ec-search-icon {
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #757575;
+                pointer-events: none;
+                display: flex;
+                align-items: center;
+            }
+
+            #EpisodeControlConfigPage .ec-btn-secondary {
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                color: #ddd;
+                padding: 7px 12px;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+            #EpisodeControlConfigPage .ec-btn-secondary:hover {
+                background: rgba(255, 255, 255, 0.15);
+                color: #fff;
+            }
+
+            #EpisodeControlConfigPage .ec-tree-container {
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                background: rgba(18, 18, 20, 0.95);
+                border-radius: 8px;
+                max-height: 520px;
+                overflow-y: auto;
+                padding: 0.75rem;
+            }
+
+            #EpisodeControlConfigPage .ec-tree-container::-webkit-scrollbar {
+                width: 6px;
+            }
+            #EpisodeControlConfigPage .ec-tree-container::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 3px;
+            }
+
+            #EpisodeControlConfigPage .ec-tree-node {
+                margin: 2px 0;
+                user-select: none;
+            }
+
+            #EpisodeControlConfigPage .ec-tree-row {
+                display: flex;
+                align-items: center;
+                padding: 6px 10px;
+                border-radius: 6px;
+                gap: 8px;
+                transition: background-color 0.15s ease;
+            }
+
+            #EpisodeControlConfigPage .ec-tree-row:hover {
+                background: rgba(255, 255, 255, 0.06);
+            }
+
+            #EpisodeControlConfigPage .ec-tree-row.ec-is-locked {
+                background: rgba(239, 83, 80, 0.12);
+                border-left: 3px solid #ef5350;
+            }
+
+            #EpisodeControlConfigPage .ec-chevron {
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                color: #8e8e93;
+                font-weight: bold;
+                font-size: 13px;
+                transition: transform 0.2s ease, color 0.2s ease;
+                flex-shrink: 0;
+                user-select: none;
+            }
+
+            #EpisodeControlConfigPage .ec-chevron:hover {
+                color: #fff;
+            }
+
+            #EpisodeControlConfigPage .ec-chevron.expanded {
+                transform: rotate(90deg);
+                color: #00a4dc;
+            }
+
+            #EpisodeControlConfigPage .ec-chevron.placeholder {
+                visibility: hidden;
+                pointer-events: none;
+            }
+
+            #EpisodeControlConfigPage .ec-checkbox {
+                appearance: none;
+                -webkit-appearance: none;
+                width: 18px;
+                height: 18px;
+                border: 2px solid rgba(255, 255, 255, 0.35);
+                border-radius: 4px;
+                background: transparent;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+                flex-shrink: 0;
+                transition: all 0.15s ease;
+                vertical-align: middle;
+            }
+
+            #EpisodeControlConfigPage .ec-checkbox:hover {
+                border-color: #00a4dc;
+            }
+
+            #EpisodeControlConfigPage .ec-checkbox:checked {
+                background: #ef5350;
+                border-color: #ef5350;
+            }
+
+            #EpisodeControlConfigPage .ec-checkbox:checked::before {
+                content: "✓";
+                color: #fff;
+                font-size: 12px;
+                font-weight: bold;
+                line-height: 1;
+            }
+
+            #EpisodeControlConfigPage .ec-item-label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                flex: 1;
+                font-size: 0.92rem;
+                color: #f0f0f0;
+            }
+
+            #EpisodeControlConfigPage .ec-type-pill {
+                font-size: 0.7rem;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-weight: 600;
+                letter-spacing: 0.3px;
+                text-transform: uppercase;
+            }
+
+            #EpisodeControlConfigPage .ec-pill-series { background: rgba(0, 164, 220, 0.25); color: #40c4ff; }
+            #EpisodeControlConfigPage .ec-pill-season { background: rgba(156, 39, 176, 0.25); color: #ce93d8; }
+            #EpisodeControlConfigPage .ec-pill-episode { background: rgba(76, 175, 80, 0.25); color: #81c784; }
+
+            #EpisodeControlConfigPage .ec-lock-indicator {
+                font-size: 0.8rem;
+                color: #ef5350;
+                font-weight: 500;
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                margin-left: auto;
+            }
+
+            #EpisodeControlConfigPage .ec-lock-indicator svg {
+                flex-shrink: 0;
+            }
+
+            #EpisodeControlConfigPage .ec-tree-children {
+                margin-left: 24px;
+                border-left: 1px dashed rgba(255, 255, 255, 0.12);
+                padding-left: 6px;
+            }
+
+            #EpisodeControlConfigPage .ec-hidden {
+                display: none !important;
+            }
+
+            /* User selection grid */
+            #EpisodeControlConfigPage .ec-user-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 12px;
+                margin-top: 0.5rem;
+            }
+
+            #EpisodeControlConfigPage .ec-user-card {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 10px 14px;
+                background: rgba(0, 0, 0, 0.35);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            #EpisodeControlConfigPage .ec-user-card:hover {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.25);
+            }
+
+            #EpisodeControlConfigPage .ec-user-card.selected {
+                background: rgba(0, 164, 220, 0.15);
+                border-color: #00a4dc;
+            }
+
+            #EpisodeControlConfigPage .ec-user-avatar {
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                background: #0076a8;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                font-size: 0.95rem;
+                flex-shrink: 0;
+            }
+
+            #EpisodeControlConfigPage .ec-user-info {
+                flex: 1;
+                overflow: hidden;
+            }
+
+            #EpisodeControlConfigPage .ec-user-name {
+                font-weight: 500;
+                color: #fff;
+                font-size: 0.92rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            #EpisodeControlConfigPage .ec-user-role {
+                font-size: 0.75rem;
+                color: #888;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            #EpisodeControlConfigPage .ec-user-role svg {
+                color: #ffa726;
+            }
+
+            #EpisodeControlConfigPage .ec-btn-primary {
+                background: linear-gradient(135deg, #00a4dc, #0076a8);
+                border: none;
+                color: #fff;
+                padding: 12px 28px;
+                border-radius: 6px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 4px 14px rgba(0, 164, 220, 0.4);
+                transition: all 0.2s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            #EpisodeControlConfigPage .ec-btn-primary:hover {
+                box-shadow: 0 6px 20px rgba(0, 164, 220, 0.6);
+                transform: translateY(-1px);
+            }
+
+            #EpisodeControlConfigPage .ec-btn-primary:active {
+                transform: translateY(1px);
+            }
+
+            #EpisodeControlConfigPage .ec-empty-msg {
+                padding: 2rem;
+                text-align: center;
+                color: #757575;
+                font-style: italic;
+            }
+        </style>
+
+        <div data-role="content">
+            <div class="content-primary">
+                <div class="ec-container">
+                    
+                    <div class="ec-header">
+                        <h1>
+                            <span>EpisodeControl</span>
+                            <span class="ec-badge-pro">Spoiler Shield</span>
+                        </h1>
+                        <p class="ec-subtitle">Lock individual episodes, seasons, or entire series to protect against spoilers and restrict playback.</p>
+                    </div>
+
+                    <form id="UnpublishConfigForm">
+                        
+                        <!-- Control Mode Card -->
+                        <div class="ec-card">
+                            <div class="ec-card-header">
+                                <div class="ec-card-title">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                                    <span>Episode Control Mode</span>
+                                </div>
+                                <span style="font-size: 0.85rem; color: #888;">Choose how locked content is handled for non-immune users</span>
+                            </div>
+
+                            <div class="ec-mode-grid">
+                                
+                                <div class="ec-mode-option active" data-mode="0">
+                                    <div class="ec-mode-header">
+                                        <div class="ec-mode-radio"></div>
+                                        <div class="ec-mode-title">Hide Completely</div>
+                                    </div>
+                                    <div class="ec-mode-desc">
+                                        Locked episodes are completely invisible in season lists, next up, search, and library views.
+                                    </div>
+                                </div>
+
+                                <div class="ec-mode-option" data-mode="1">
+                                    <div class="ec-mode-header">
+                                        <div class="ec-mode-radio"></div>
+                                        <div class="ec-mode-title">Hide Spoilers</div>
+                                    </div>
+                                    <div class="ec-mode-desc">
+                                        Shows episode title & number only. Thumbnails and descriptions are masked with a padlock. Playback is locked with an alert.
+                                    </div>
+                                </div>
+
+                                <div class="ec-mode-option" data-mode="2">
+                                    <div class="ec-mode-header">
+                                        <div class="ec-mode-radio"></div>
+                                        <div class="ec-mode-title">Block Playback Only</div>
+                                    </div>
+                                    <div class="ec-mode-desc">
+                                        Thumbnails, titles, and descriptions remain visible, but playing locked episodes is disabled and shows an alert.
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Media Library Tree Card -->
+                        <div class="ec-card">
+                            <div class="ec-card-header">
+                                <div class="ec-card-title">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg>
+                                    <span>TV Library Control</span>
+                                </div>
+                                <span class="ec-stats-badge" id="lockedCountBadge">0 items locked</span>
+                            </div>
+
+                            <div class="ec-toolbar">
+                                <div class="ec-search-box">
+                                    <span class="ec-search-icon">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                                    </span>
+                                    <input type="text" id="treeSearchInput" class="ec-search-input" placeholder="Filter TV shows by name..." />
+                                </div>
+                                <button type="button" class="ec-btn-secondary" id="btnExpandAll">Expand All</button>
+                                <button type="button" class="ec-btn-secondary" id="btnCollapseAll">Collapse All</button>
+                                <button type="button" class="ec-btn-secondary" id="btnClearAll">Clear All Locks</button>
+                            </div>
+
+                            <div class="ec-tree-container" id="mediaTreeContainer">
+                                <div class="ec-empty-msg">Loading TV library...</div>
+                            </div>
+                        </div>
+
+                        <!-- Immune Users Card -->
+                        <div class="ec-card">
+                            <div class="ec-card-header">
+                                <div class="ec-card-title">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                                    <span>Immune Users (Bypass Locks)</span>
+                                </div>
+                                <span style="font-size: 0.85rem; color: #888;">Selected users can view and play locked content normally</span>
+                            </div>
+
+                            <div id="userSelectionContainer">
+                                <div class="ec-empty-msg">Loading users...</div>
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 15px;">
+                            <button type="submit" class="ec-btn-primary">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+                                <span>Save Configuration</span>
+                            </button>
+                            <span id="saveStatusText" style="color: #4caf50; font-weight: 500;"></span>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var UnpublishApp = {
+                pluginId: "A1B2C3D4-E5F6-4a1b-9c8d-7e6f5a4b3c2d",
+                lockedItems: new Set(),
+                immuneUsers: new Set(),
+                protectionMode: 0,
+                allShows: [],
+                allUsers: [],
+                nodeRegistry: new Map(),
+
+                normalizeGuid: function(id) {
+                    if (!id) return '';
+                    return id.toString().replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                },
+
+                load: function() {
+                    Dashboard.showLoadingMsg();
+                    
+                    ApiClient.getPluginConfiguration(UnpublishApp.pluginId)
+                    .then(function(config) {
+                        UnpublishApp.lockedItems.clear();
+                        (config.LockedItemIds || []).forEach(function(id) {
+                            UnpublishApp.lockedItems.add(UnpublishApp.normalizeGuid(id));
+                        });
+
+                        UnpublishApp.immuneUsers.clear();
+                        (config.ImmuneUserIds || []).forEach(function(id) {
+                            UnpublishApp.immuneUsers.add(UnpublishApp.normalizeGuid(id));
+                        });
+
+                        UnpublishApp.protectionMode = config.ProtectionMode || 0;
+                        UnpublishApp.updateModeUI();
+                        UnpublishApp.updateLockedCount();
+
+                        ApiClient.getUsers().then(function(users) {
+                            UnpublishApp.allUsers = users || [];
+                            UnpublishApp.renderUsers();
+                        }).catch(function(e) {
+                            console.error("Failed to load users", e);
+                        });
+
+                        UnpublishApp.loadShows();
+                    })
+                    .catch(function(err) {
+                        Dashboard.hideLoadingMsg();
+                        document.querySelector('#mediaTreeContainer').innerHTML = 
+                            '<div class="ec-empty-msg" style="color:#ef5350">Failed to load configuration: ' + (err.status || err) + '</div>';
+                    });
+                },
+
+                updateModeUI: function() {
+                    document.querySelectorAll('.ec-mode-option').forEach(function(el) {
+                        var modeVal = parseInt(el.dataset.mode, 10);
+                        if (modeVal === UnpublishApp.protectionMode) {
+                            el.classList.add('active');
+                        } else {
+                            el.classList.remove('active');
+                        }
+                    });
+                },
+
+                loadShows: function() {
+                    ApiClient.getJSON(ApiClient.getUrl("Unpublish/Library/Shows"))
+                    .then(function(shows) {
+                        Dashboard.hideLoadingMsg();
+                        UnpublishApp.allShows = shows || [];
+                        UnpublishApp.renderTree(shows);
+                    })
+                    .catch(function(err) {
+                        Dashboard.hideLoadingMsg();
+                        document.querySelector('#mediaTreeContainer').innerHTML = 
+                            '<div class="ec-empty-msg" style="color:#ef5350">Error loading library: ' + (err.status || err) + '</div>';
+                    });
+                },
+
+                renderTree: function(shows) {
+                    var container = document.querySelector('#mediaTreeContainer');
+                    container.innerHTML = '';
+                    UnpublishApp.nodeRegistry.clear();
+
+                    if (!shows || shows.length === 0) {
+                        container.innerHTML = '<div class="ec-empty-msg">No TV series found in your Jellyfin library.</div>';
+                        return;
+                    }
+
+                    shows.forEach(function(show) {
+                        var node = UnpublishApp.createNodeElement(show);
+                        container.appendChild(node);
+                    });
+                },
+
+                createNodeElement: function(item) {
+                    var normalizedId = UnpublishApp.normalizeGuid(item.Id);
+                    var isExpandable = item.Type === 'Series' || item.Type === 'Season';
+                    var isLocked = UnpublishApp.lockedItems.has(normalizedId);
+
+                    var nodeDiv = document.createElement('div');
+                    nodeDiv.className = 'ec-tree-node';
+                    nodeDiv.dataset.id = item.Id;
+                    nodeDiv.dataset.normalizedId = normalizedId;
+                    nodeDiv.dataset.name = (item.Name || '').toLowerCase();
+                    nodeDiv.dataset.type = item.Type;
+
+                    var rowDiv = document.createElement('div');
+                    rowDiv.className = 'ec-tree-row' + (isLocked ? ' ec-is-locked' : '');
+
+                    // Chevron symbol
+                    var chevron = document.createElement('div');
+                    chevron.className = 'ec-chevron' + (isExpandable ? '' : ' placeholder');
+                    chevron.textContent = '▶';
+
+                    // Checkbox
+                    var checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'ec-checkbox';
+                    checkbox.checked = isLocked;
+
+                    // Label with Type Pill & Title
+                    var labelDiv = document.createElement('div');
+                    labelDiv.className = 'ec-item-label';
+
+                    var pillClass = item.Type === 'Series' ? 'ec-pill-series' : (item.Type === 'Season' ? 'ec-pill-season' : 'ec-pill-episode');
+                    var lockSvg = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>';
+                    var lockHtml = isLocked ? '<span class="ec-lock-indicator">' + lockSvg + '<span>Locked</span></span>' : '';
+
+                    labelDiv.innerHTML = '<span class="ec-type-pill ' + pillClass + '">' + item.Type + '</span>' +
+                                          '<span style="font-weight: 500;">' + item.Name + '</span>' +
+                                          lockHtml;
+
+                    rowDiv.appendChild(chevron);
+                    rowDiv.appendChild(checkbox);
+                    rowDiv.appendChild(labelDiv);
+                    nodeDiv.appendChild(rowDiv);
+
+                    // Children Container
+                    var childrenDiv = document.createElement('div');
+                    childrenDiv.className = 'ec-tree-children ec-hidden';
+                    nodeDiv.appendChild(childrenDiv);
+
+                    var nodeState = {
+                        item: item,
+                        normalizedId: normalizedId,
+                        nodeDiv: nodeDiv,
+                        rowDiv: rowDiv,
+                        chevron: chevron,
+                        checkbox: checkbox,
+                        childrenDiv: childrenDiv,
+                        loaded: false,
+                        isExpanded: false
+                    };
+
+                    UnpublishApp.nodeRegistry.set(normalizedId, nodeState);
+
+                    // Checkbox toggle logic with cascading to children
+                    checkbox.addEventListener('change', function(e) {
+                        e.stopPropagation();
+                        var checked = e.target.checked;
+                        UnpublishApp.setNodeLockState(nodeState, checked, true);
+                        UnpublishApp.updateLockedCount();
+                    });
+
+                    // Expand / Collapse click handler
+                    var toggleExpand = function(e) {
+                        if (e.target === checkbox) return;
+                        if (!isExpandable) return;
+
+                        if (nodeState.isExpanded) {
+                            nodeState.isExpanded = false;
+                            childrenDiv.classList.add('ec-hidden');
+                            chevron.classList.remove('expanded');
+                        } else {
+                            nodeState.isExpanded = true;
+                            childrenDiv.classList.remove('ec-hidden');
+                            chevron.classList.add('expanded');
+
+                            if (!nodeState.loaded) {
+                                childrenDiv.innerHTML = '<div style="padding:6px 12px; color:#888; font-size:0.85rem;">Loading...</div>';
+                                ApiClient.getJSON(ApiClient.getUrl("Unpublish/Library/Children?parentId=" + item.Id))
+                                .then(function(children) {
+                                    childrenDiv.innerHTML = '';
+                                    nodeState.loaded = true;
+                                    if (!children || children.length === 0) {
+                                        childrenDiv.innerHTML = '<div style="padding:6px 12px; color:#666; font-size:0.85rem; font-style:italic;">No children found</div>';
+                                        return;
+                                    }
+                                    var isParentLocked = UnpublishApp.lockedItems.has(nodeState.normalizedId);
+                                    children.forEach(function(child) {
+                                        var childNormId = UnpublishApp.normalizeGuid(child.Id);
+                                        if (isParentLocked) {
+                                            UnpublishApp.lockedItems.add(childNormId);
+                                        }
+                                        var childNode = UnpublishApp.createNodeElement(child);
+                                        childrenDiv.appendChild(childNode);
+                                    });
+                                    UnpublishApp.updateLockedCount();
+                                })
+                                .catch(function(err) {
+                                    childrenDiv.innerHTML = '<div style="padding:6px 12px; color:#ef5350; font-size:0.85rem;">Error: ' + (err.status || err) + '</div>';
+                                });
+                            }
+                        }
+                    };
+
+                    chevron.addEventListener('click', toggleExpand);
+                    labelDiv.addEventListener('click', toggleExpand);
+
+                    return nodeDiv;
+                },
+
+                setNodeLockState: function(nodeState, locked, cascadeDown) {
+                    if (locked) {
+                        UnpublishApp.lockedItems.add(nodeState.normalizedId);
+                        nodeState.checkbox.checked = true;
+                        nodeState.rowDiv.classList.add('ec-is-locked');
+                    } else {
+                        UnpublishApp.lockedItems.delete(nodeState.normalizedId);
+                        nodeState.checkbox.checked = false;
+                        nodeState.rowDiv.classList.remove('ec-is-locked');
+                    }
+                    UnpublishApp.updateNodeLockIndicator(nodeState);
+
+                    if (cascadeDown && nodeState.childrenDiv) {
+                        var childNodes = nodeState.childrenDiv.querySelectorAll('.ec-tree-node');
+                        childNodes.forEach(function(childEl) {
+                            var childNormId = childEl.dataset.normalizedId;
+                            var childState = UnpublishApp.nodeRegistry.get(childNormId);
+                            if (childState) {
+                                UnpublishApp.setNodeLockState(childState, locked, true);
+                            }
+                        });
+                    }
+                },
+
+                updateNodeLockIndicator: function(nodeState) {
+                    var isLocked = UnpublishApp.lockedItems.has(nodeState.normalizedId);
+                    var pillClass = nodeState.item.Type === 'Series' ? 'ec-pill-series' : (nodeState.item.Type === 'Season' ? 'ec-pill-season' : 'ec-pill-episode');
+                    var lockSvg = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>';
+                    var lockHtml = isLocked ? '<span class="ec-lock-indicator">' + lockSvg + '<span>Locked</span></span>' : '';
+                    
+                    var labelDiv = nodeState.rowDiv.querySelector('.ec-item-label');
+                    if (labelDiv) {
+                        labelDiv.innerHTML = '<span class="ec-type-pill ' + pillClass + '">' + nodeState.item.Type + '</span>' +
+                                              '<span style="font-weight: 500;">' + nodeState.item.Name + '</span>' +
+                                              lockHtml;
+                    }
+                },
+
+                updateLockedCount: function() {
+                    var count = UnpublishApp.lockedItems.size;
+                    var badge = document.querySelector('#lockedCountBadge');
+                    if (badge) {
+                        badge.textContent = count === 1 ? '1 item locked' : count + ' items locked';
+                    }
+                },
+
+                renderUsers: function() {
+                    var container = document.querySelector('#userSelectionContainer');
+                    container.innerHTML = '';
+
+                    if (!UnpublishApp.allUsers || UnpublishApp.allUsers.length === 0) {
+                        container.innerHTML = '<div class="ec-empty-msg">No users found.</div>';
+                        return;
+                    }
+
+                    var grid = document.createElement('div');
+                    grid.className = 'ec-user-grid';
+
+                    UnpublishApp.allUsers.forEach(function(user) {
+                        var normalizedUserId = UnpublishApp.normalizeGuid(user.Id);
+                        var isImmune = UnpublishApp.immuneUsers.has(normalizedUserId);
+                        var initial = (user.Name || 'U').charAt(0).toUpperCase();
+                        var isAdmin = user.Policy && user.Policy.IsAdministrator;
+                        var crownSvg = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"/></svg>';
+                        var roleHtml = isAdmin ? crownSvg + '<span>Administrator</span>' : '<span>User</span>';
+
+                        var card = document.createElement('div');
+                        card.className = 'ec-user-card' + (isImmune ? ' selected' : '');
+                        
+                        card.innerHTML = '<input type="checkbox" class="ec-checkbox user-checkbox" ' + (isImmune ? 'checked' : '') + ' />' +
+                                         '<div class="ec-user-avatar">' + initial + '</div>' +
+                                         '<div class="ec-user-info">' +
+                                             '<div class="ec-user-name">' + user.Name + '</div>' +
+                                             '<div class="ec-user-role">' + roleHtml + '</div>' +
+                                         '</div>';
+
+                        var checkbox = card.querySelector('.user-checkbox');
+                        var toggleUser = function() {
+                            var willCheck = !UnpublishApp.immuneUsers.has(normalizedUserId);
+                            if (willCheck) {
+                                UnpublishApp.immuneUsers.add(normalizedUserId);
+                                card.classList.add('selected');
+                                checkbox.checked = true;
+                            } else {
+                                UnpublishApp.immuneUsers.delete(normalizedUserId);
+                                card.classList.remove('selected');
+                                checkbox.checked = false;
+                            }
+                        };
+
+                        card.addEventListener('click', function(e) {
+                            if (e.target !== checkbox) {
+                                toggleUser();
+                            }
+                        });
+
+                        checkbox.addEventListener('change', function(e) {
+                            if (e.target.checked) {
+                                UnpublishApp.immuneUsers.add(normalizedUserId);
+                                card.classList.add('selected');
+                            } else {
+                                UnpublishApp.immuneUsers.delete(normalizedUserId);
+                                card.classList.remove('selected');
+                            }
+                        });
+
+                        grid.appendChild(card);
+                    });
+
+                    container.appendChild(grid);
+                },
+
+                save: function() {
+                    Dashboard.showLoadingMsg();
+                    var config = {
+                        LockedItemIds: Array.from(UnpublishApp.lockedItems),
+                        ImmuneUserIds: Array.from(UnpublishApp.immuneUsers),
+                        ProtectionMode: UnpublishApp.protectionMode
+                    };
+
+                    ApiClient.updatePluginConfiguration(UnpublishApp.pluginId, config)
+                    .then(function() {
+                        Dashboard.hideLoadingMsg();
+                        Dashboard.processPluginConfigurationUpdateResult();
+                    })
+                    .catch(function(err) {
+                        Dashboard.hideLoadingMsg();
+                        Dashboard.alert({
+                            message: "Failed to save configuration: " + (err.status || err)
+                        });
+                    });
+                }
+            };
+
+            // Mode Selector Click Handlers
+            document.querySelectorAll('.ec-mode-option').forEach(function(el) {
+                el.addEventListener('click', function() {
+                    UnpublishApp.protectionMode = parseInt(el.dataset.mode, 10);
+                    UnpublishApp.updateModeUI();
+                });
+            });
+
+            // Search filter
+            document.querySelector('#treeSearchInput').addEventListener('input', function(e) {
+                var query = e.target.value.toLowerCase().trim();
+                var nodes = document.querySelectorAll('#mediaTreeContainer > .ec-tree-node');
+                nodes.forEach(function(node) {
+                    var name = node.dataset.name || '';
+                    if (!query || name.indexOf(query) !== -1) {
+                        node.classList.remove('ec-hidden');
+                    } else {
+                        node.classList.add('ec-hidden');
+                    }
+                });
+            });
+
+            // Expand all top-level shows
+            document.querySelector('#btnExpandAll').addEventListener('click', function() {
+                UnpublishApp.nodeRegistry.forEach(function(state) {
+                    if (state.item.Type === 'Series' && !state.isExpanded) {
+                        state.nodeDiv.querySelector('.ec-chevron').click();
+                    }
+                });
+            });
+
+            // Collapse all top-level shows
+            document.querySelector('#btnCollapseAll').addEventListener('click', function() {
+                UnpublishApp.nodeRegistry.forEach(function(state) {
+                    if (state.item.Type === 'Series' && state.isExpanded) {
+                        state.nodeDiv.querySelector('.ec-chevron').click();
+                    }
+                });
+            });
+
+            // Clear all locks
+            document.querySelector('#btnClearAll').addEventListener('click', function() {
+                if (confirm("Are you sure you want to unlock all items?")) {
+                    UnpublishApp.lockedItems.clear();
+                    document.querySelectorAll('.ec-checkbox').forEach(function(cb) {
+                        cb.checked = false;
+                    });
+                    document.querySelectorAll('.ec-tree-row').forEach(function(r) {
+                        r.classList.remove('ec-is-locked');
+                    });
+                    UnpublishApp.nodeRegistry.forEach(function(state) {
+                        UnpublishApp.updateNodeLockIndicator(state);
+                    });
+                    UnpublishApp.updateLockedCount();
+                }
+            });
+
+            document.querySelector('#UnpublishConfigPage').addEventListener('pageshow', function() {
+                UnpublishApp.load();
+            });
+
+            document.querySelector('#UnpublishConfigForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                UnpublishApp.save();
+            });
+        </script>
+    </div>
+</body>
+</html>
