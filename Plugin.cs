@@ -29,7 +29,10 @@ namespace Unpublish
                 new PluginPageInfo
                 {
                     Name = "Unpublish",
-                    EmbeddedResourcePath = GetType().Namespace + ".Web.configPage.html"
+                    EmbeddedResourcePath = GetType().Namespace + ".Web.configPage.html",
+                    EnableInMainMenu = true,
+                    MenuSection = "server",
+                    MenuIcon = "lock"
                 }
             };
         }
