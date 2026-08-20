@@ -1,0 +1,19 @@
+{
+  "guid": "A1B2C3D4-E5F6-4a1b-9c8d-7e6f5a4b3c2d",
+  "name": "Unpublish",
+  "description": "Lock individual episodes, seasons, or entire series to protect against spoilers and restrict playback.",
+  "overview": "A comprehensive tool to hide or block spoilers from non-immune users in Jellyfin.",
+  "owner": "AJ",
+  "category": "General",
+  "imageUrl": "",
+  "versions": [
+    {
+      "version": "1.0.0.0",
+      "changelog": "Initial release",
+      "targetAbi": "10.9.0.0",
+      "sourceUrl": "https://github.com/USERNAME/REPO/releases/download/v1.0.0.0/Unpublish.zip",
+      "checksum": "228F32EA85C21F9F8BBC8F64F10480FD",
+      "timestamp": "2026-08-20T17:43:10Z"
+    }
+  ]
+}

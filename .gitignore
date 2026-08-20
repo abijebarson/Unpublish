@@ -1,8 +1,12 @@
 bin/
 obj/
 publish/
+publish_release/
 *.user
 *.suo
 .vscode/
 .idea/
 deploy.ps1
+deploy_template.ps1
+build_release.ps1
+*.zip
